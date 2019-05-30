@@ -36,12 +36,15 @@ public class SecurityConfig extends WebMvcConfigurerAdapter {
 	//
 	// Interceptor
 	//
+	@Bean
 	public AuthLoginInterceptor authLoginInterceptor() {
 		return new AuthLoginInterceptor();
 	}
+	@Bean
 	public AuthLogoutInterceptor authLogoutInterceptor() {
 		return new AuthLogoutInterceptor();
 	}
+	@Bean
 	public AuthInterceptor authInterceptor() {
 		return new AuthInterceptor();
 	}
