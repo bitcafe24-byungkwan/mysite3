@@ -1,4 +1,4 @@
-package com.cafe24.mysite.controller;
+package com.cafe24.mysite.service;
 
 import java.util.ArrayList;
 import java.util.List;

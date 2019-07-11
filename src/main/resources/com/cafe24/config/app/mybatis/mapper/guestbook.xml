@@ -10,19 +10,21 @@
 			]]>
 	</select>
 	
-	<select id="getList2" resultType="guestbookvo" parameterType='long'>
-	<![CDATA[
-		select no, name, contents, date_format(reg_date, '%Y-%m-%d %H:%i:%s')
-			from guestbook
-			order by reg_date desc
-	]]>
-		<if test="_parameter > 0">
+		<select id="getList2" resultType="guestbookvo" parameterType='long'>
 		<![CDATA[
-			where no < #{_parameter }
-		]]>
-		</if>		
+		  select no, name, contents, date_format(reg_date, '%Y-%m-%d %h:%i:%s')
+		    from guestbook
+	 	]]>	
+		<if test="_parameter > 0">
+			<![CDATA[
+			where no < #{_parameter}
+		 	]]>	
+		</if>    
+		<![CDATA[
+		order by no desc 
+		   limit 0, 5
+	 	]]>	
 	</select>
-	
 	<delete id="delete" parameterType="guestbookvo">
 	<![CDATA[
 	delete from guestbook 
@@ -35,6 +37,11 @@
 	<![CDATA[
 	insert into guestbook   
 		values(null,#{name },#{password },#{contents},now())					
-	]]>				
+	]]>		
+		<selectKey keyProperty="no" resultType="long" order="AFTER">
+	<![CDATA[
+	select last_insert_id()					
+	]]>
+	</selectKey>		
 	</insert>
 </mapper>

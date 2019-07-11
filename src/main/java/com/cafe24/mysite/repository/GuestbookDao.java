@@ -19,7 +19,7 @@ import com.cafe24.mysite.vo.GuestbookVo;
 
 @Repository
 public class GuestbookDao {
-	
+	private static int COUNT_PER_PAGE = 5;
 	@Autowired
 	private DataSource dataSource;
 	
@@ -44,6 +44,11 @@ public class GuestbookDao {
 		
 		return result;
 	}
+	public List<GuestbookVo> getList(Long lastNo){
+		List<GuestbookVo> result = 
+	sqlSession.selectList( "guestbook.getList2", lastNo );
+		return result;
+	}	
 //	private Connection getConnection() throws SQLException {
 //		Connection conn = null;
 //		try {

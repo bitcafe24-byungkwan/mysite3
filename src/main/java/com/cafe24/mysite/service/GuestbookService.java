@@ -26,4 +26,8 @@ public class GuestbookService {
 	public Boolean delete(GuestbookVo vo) {
 		return guestbookDao.delete(vo);
 	}
+	
+	public List<GuestbookVo> getContentList(Long lastNo) {
+		return guestbookDao.getList(lastNo);
+	}
 }
