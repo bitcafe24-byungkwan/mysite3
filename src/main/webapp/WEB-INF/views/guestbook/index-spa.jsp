@@ -39,26 +39,50 @@
 }
 </style>
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/ejs/ejs.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
-var isEnd = false;
-var render = function(vo, mode){
-	// 실제로는 template library 사용한다.
-	// -> ejs, underscore, mustache
-	var html = 
-		"<li data-no='" + vo.no + "'>" +
-		"<strong>" + vo.name + "</strong>" +
-		"<p>"  + vo.contents.replace(/</gi, "&lt;").replace(/>/gi, "&gt;").replace(/\n/gi, "<br>") + "</p>" +
-		"<strong></strong>" +
-		"<a href='#' data-no='" + vo.no + "'>삭제</a>" + 
-		"</li>";
-		
-	if(mode){
-		$("#list-guestbook").prepend(html);
-	} else {
-		$("#list-guestbook").append(html);
+var emptyFunction = function(){};
+// jQuery PlugIn
+(function($){
+	$.fn.flash = function(){
+		$(this).click(function(){
+			var isBlink = false;
+			var $that = $(this);
+			setInterval(function(){
+				$that.css("backgroundColor", isBlink ? "#f00" : "#aaa");
+				isBlink = !isBlink;
+			}, 1000);
+		})
 	}
+})(jQuery);
+///////////////////////////////
+var messageBox = function( title, message, callback ) {
+	$("#dialog-message").attr('title', title);
+	$("#dialog-message p").text(message)
+	$("#dialog-message").dialog({
+		modal: true,
+		buttons: {
+			"확인": function(){
+				$(this).dialog('close');
+			}
+		},
+		close: function(){
+			//....
+			//....
+			//....
+			(callback || emptyFunction)();
+		}
+	});
 }
+// import ejs template
+var listItemTemplate = new EJS({
+	url: '${pageContext.request.contextPath }/assets/js/ejs-templates/guestbook-list-item.ejs'
+});
+var listTemplate = new EJS({
+	url: '${pageContext.request.contextPath }/assets/js/ejs-templates/guestbook-list.ejs'
+});
+var isEnd = false;
 var fetchList = function(){
 	if(isEnd){
 		return;
@@ -85,9 +109,8 @@ var fetchList = function(){
 			}					
 			
 			// rendering
-			$.each(response.data, function(index, vo){
-				render(vo);
-			});
+			var html = listTemplate.render(response);
+			$("#list-guestbook").append(html);
 		},
 		error: function(jqXHR, status, e){
 			console.error(status + ":" + e);
@@ -109,11 +132,11 @@ $(function(){
 				}
 				
 				$.ajax({
-					url: "${pageContext.request.contextPath }/api/guestbook/delete",
+					url: "${pageContext.request.contextPath }/api/guestbook",
 					type: "delete",
-					contentType: "application/json", //post 방식으로  JSON Type으로 데이터를 보낼 때
+					//contentType: "application/json", //post 방식으로  JSON Type으로 데이터를 보낼 때
 					dataType: "json",
-					data: JSON.stringify(vo),
+					data: "passwodord=" + $("#password-delete").val(),
 					success: function(response){
 						if(response.result != "success"){
 							console.error(response.message);
@@ -139,10 +162,6 @@ $(function(){
         }
 	});	
 	
-	$("#btn-next").click(function(){
-		fetchList();
-	});
-	
 	$(window).scroll(function(){
 		var $window = $(this);
 		var scrollTop = $window.scrollTop();
@@ -161,10 +180,25 @@ $(function(){
 		var vo = {};
 		
 		// validation (clinet side, UX, jQuery Validation Plug-in)
-		// 생략
 		vo.name = $("#input-name").val();
+		if(vo.name == ''){
+			messageBox('글남기기', '이름은 필수 입력 항목입니다.', function(){
+				$('#input-name').focus();
+			});
+			return;
+		}		
 		vo.password = $("#input-password").val();
+		if(vo.password == ''){
+			messageBox('글남기기', '비밀번호는 필수 입력 항목입니다.', function(){
+				$('#input-password').focus();
+			});
+			return;
+		}		
 		vo.contents = $("#tx-content").val();
+		if(vo.contents == ''){
+			messageBox('글남기기', '내용은 필수 입력 항목입니다.');
+			return;
+		}		
 		
 		//console.log( $.param(vo) );
 		//console.log( JSON.stringify(vo) );
@@ -182,7 +216,8 @@ $(function(){
 				}
 				
 				//rendering
-				render(response.data, true);
+				var html = listItemTemplate.render(response.data);
+				$("#list-guestbook").prepend(html);
 				
 				// reset form
 				$("#add-form")[0].reset();
@@ -202,6 +237,9 @@ $(function(){
 	
 	// 최초 리스트 가져오기
 	fetchList();
+	
+	// jquery plugin test
+	$("#btn-next").flash();
 });
 </script>
 </head>
@@ -211,6 +249,8 @@ $(function(){
 		<div id="content">
 			<div id="guestbook">
 				<h1>방명록</h1>
+				<button id="btn-next">flash jquery plug-in</button>
+				<br/>
 				<form id="add-form" action="" method="post">
 					<input type="text" id="input-name" placeholder="이름">
 					<input type="password" id="input-password" placeholder="비밀번호">
@@ -228,7 +268,6 @@ $(function(){
 					<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
   				</form>
 			</div>
-			<button id="btn-next">Next Page</button>
 			<div id="dialog-message" title="" style="display:none">
   				<p></p>
 			</div>						
