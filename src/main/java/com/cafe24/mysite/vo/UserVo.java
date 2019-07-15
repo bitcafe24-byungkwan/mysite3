@@ -1,8 +1,12 @@
 package com.cafe24.mysite.vo;
 
+import javax.validation.constraints.Pattern;
+
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import com.cafe24.mysite.vaildator.constraints.ValidGender;
 
 public class UserVo {
 	public enum UserRole{
@@ -20,7 +24,11 @@ public class UserVo {
 	@Email
 	@NotEmpty
 	private String email;
+	
+	@Pattern(regexp="[0-9]{5}")
 	private String password;
+	
+	@ValidGender
 	private String gender;
 	private String joinDate;
 	private UserRole role;
