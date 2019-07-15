@@ -11,6 +11,8 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,7 +35,9 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-
+	@Autowired
+	private MessageSource messageSource;
+	
 	@ResponseBody
 	@RequestMapping("/checkemail")
 	public JSONResult checkEmail(
@@ -80,7 +84,6 @@ public class UserController {
 	
 	@PostMapping("/login")
 	public ResponseEntity<JSONResult> login(@RequestBody UserVo userVo){
-	
 		Validator validator = 
 				Validation.buildDefaultValidatorFactory().getValidator();
 		
@@ -89,11 +92,15 @@ public class UserController {
 		
 		if(validatorResults.isEmpty() == false) {
 			for(ConstraintViolation<UserVo> validatorResult : validatorResults) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONResult.fail(validatorResult.getMessage())); 
+				//String message = validatorResult.getMessage();
+				String message = messageSource.getMessage("Email.userVo.email", null, LocaleContextHolder.getLocale());
+				JSONResult result = JSONResult.fail(message);
+				
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result); 
 			}
 		}
 		
-		return ResponseEntity.status(HttpStatus.OK).body(JSONResult.success(null)); 
+		return ResponseEntity.status(HttpStatus.OK).body(JSONResult.success(null));  
 	}
 	
 }
