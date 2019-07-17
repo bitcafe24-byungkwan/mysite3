@@ -49,7 +49,7 @@ public class UserControllerTest {
 		// 1. Normal User's Join
 		userVo.setName("abcde");
 		userVo.setEmail("a@b.c");
-		userVo.setPassword("12345");
+		userVo.setPassword("123-45");
 		userVo.setGender("male");
 		
 		ResultActions resultActions = 
@@ -59,8 +59,9 @@ public class UserControllerTest {
 						.content(new Gson().toJson(userVo)));
 		
 		resultActions
-		.andExpect(status().isOk())
-		.andDo(print());
+		.andExpect(status().isBadRequest())
+		.andDo(print())
+		.andExpect(jsonPath("$.result", is("success")));
 	}
 	
 	@Test
@@ -69,7 +70,7 @@ public class UserControllerTest {
 		
 		// 1. Normal User's Login data
 		userVo.setEmail("a@b.c");
-		userVo.setPassword("12345");
+		userVo.setPassword("123-456");
 		
 		ResultActions resultActions = 
 				mockMvc
