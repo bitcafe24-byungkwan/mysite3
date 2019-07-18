@@ -45,13 +45,13 @@ public class BoardController {
 		return "redirect:/board/1";
 	}
 	
-	@Auth(role=Role.USER )
+//	@Auth(role=Role.USER )
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
 	public String addView() {		
 		return "board/write";
 	}
 	
-	@Auth(role=Role.USER )
+//	@Auth(role=Role.USER )
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	public String add(@ModelAttribute BoardVo boardVo, @AuthUser UserVo authUser,
 			Model model) {
@@ -84,7 +84,7 @@ public class BoardController {
 		return "board/view";
 	}
 	
-	@Auth(role=Role.USER )
+//	@Auth(role=Role.USER )
 	@RequestMapping(value = "/modify/{id:[\\d]+}", method = RequestMethod.GET)
 	public String modifyView(@PathVariable Long id,Model model, @AuthUser UserVo authUser) {
 		
@@ -101,7 +101,7 @@ public class BoardController {
 		return "board/modify";
 	}
 	
-	@Auth(role = Role.USER)
+//	@Auth(role = Role.USER)
 	@RequestMapping(value = "/modify/{id:[\\d]+}", method = RequestMethod.POST)
 	public String modify(@PathVariable Long id,
 			@ModelAttribute BoardVo updateVo,
@@ -121,7 +121,7 @@ public class BoardController {
 		return "redirect:/board/view/"+id;
 	}
 	
-	@Auth(role = Role.USER)
+//	@Auth(role = Role.USER)
 	@RequestMapping(value = "/delete/{id:[\\d]+}", method = RequestMethod.GET)
 	public String delete(@PathVariable Long id,
 			Model model, @AuthUser UserVo authUser) {
@@ -139,7 +139,7 @@ public class BoardController {
 		return "redirect:/board";
 	}
 	
-	@Auth(role = Role.USER)
+//	@Auth(role = Role.USER)
 	@RequestMapping(value = "/write/{id:[\\d]+}", method = RequestMethod.GET)
 	public String addReply(@PathVariable Long id,Model model) {
 

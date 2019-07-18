@@ -85,15 +85,15 @@ public class UserController {
 //	}
 //	
 	
-	@RequestMapping(value = "/auth", method = RequestMethod.POST)
-	public void auth() {}
+//	@RequestMapping(value = "/auth", method = RequestMethod.POST)
+//	public void auth() {}
 	
-	@RequestMapping(value = "/logout", method = RequestMethod.GET )
-	public String logout(HttpSession session) {
-		session.removeAttribute("authUser");
-		session.invalidate();
-		return "redirect:/";
-	}
+//	@RequestMapping(value = "/logout", method = RequestMethod.GET )
+//	public String logout(HttpSession session) {
+//		session.removeAttribute("authUser");
+//		session.invalidate();
+//		return "redirect:/";
+//	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.GET )
 	public String updateForm(@AuthUser UserVo authUser, HttpSession session, Model model) {
