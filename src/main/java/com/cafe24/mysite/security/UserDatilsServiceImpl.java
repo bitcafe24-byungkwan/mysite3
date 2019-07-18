@@ -1,6 +1,7 @@
-package com.cafe24.security;
+package com.cafe24.mysite.security;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +29,21 @@ public class UserDatilsServiceImpl implements UserDetailsService {
 			// mock data
 			//String role = userVo.getRole();
 			String role = "ROLE_USER";
-
+			if(userVo.getRole()==UserVo.UserRole.ADMIN)
+				role = "ROLE_ADMIN";
+			securityUser.setNo(userVo.getNo());
 			securityUser.setName(userVo.getName());         // biz data  
 			securityUser.setUsername(userVo.getEmail());    // principal
 			securityUser.setPassword(userVo.getPassword()); // credential
 		
-			List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-			authorities.add(new SimpleGrantedAuthority(role));
-			securityUser.setAuthorities(authorities);	
+//			List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+//			authorities.add(new SimpleGrantedAuthority(role));			
+			securityUser.setAuthorities(Arrays.asList(new SimpleGrantedAuthority(role)));	
 		}
 		
 		return securityUser;
+		
+		//return new User();
 	}
 	
 

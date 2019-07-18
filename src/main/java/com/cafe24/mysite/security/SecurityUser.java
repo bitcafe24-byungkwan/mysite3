@@ -1,4 +1,4 @@
-package com.cafe24.security;
+package com.cafe24.mysite.security;
 
 import java.util.Collection;
 
@@ -9,13 +9,25 @@ public class SecurityUser implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
+	// security
 	private Collection<? extends GrantedAuthority> authorities;
+	private String username; // credential(email)
+	private String password; // credential(password)
 
-	private String username; // email
-	private String password;
-
+	// domain fields (principal: 보호할 사용자 중요 데이터)
+	private Long no;
 	private String name; // biz data
 
+	
+	public Long getNo() {
+		return no;
+	}
+
+	public void setNo(Long no) {
+		this.no = no;
+	}
+	
+	
 	public String getUsername() {
 		return username;
 	}

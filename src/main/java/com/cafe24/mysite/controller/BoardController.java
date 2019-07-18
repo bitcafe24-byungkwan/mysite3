@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cafe24.mysite.security.AuthUser;
+import com.cafe24.mysite.security.SecurityUser;
 import com.cafe24.mysite.service.BoardService;
 import com.cafe24.mysite.vo.BoardVo;
 import com.cafe24.mysite.vo.BoardVo.StatusType;
-import com.cafe24.security.Auth;
-import com.cafe24.security.AuthUser;
-import com.cafe24.security.Auth.Role;
 import com.cafe24.mysite.vo.UserVo;
 
 
@@ -53,7 +52,7 @@ public class BoardController {
 	
 //	@Auth(role=Role.USER )
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String add(@ModelAttribute BoardVo boardVo, @AuthUser UserVo authUser,
+	public String add(@ModelAttribute BoardVo boardVo, @AuthUser SecurityUser securityUser,
 			Model model) {
 //		if(session == null) {			
 //			return "redirect:/";
@@ -65,7 +64,7 @@ public class BoardController {
 //			return "redirect:/";
 //		}
 //		
-		boardVo.setUserNo(authUser.getNo());
+		boardVo.setUserNo(securityUser.getNo());
 	
 			
 		return "redirect:/board/view/" + boardService.write(boardVo);
@@ -86,14 +85,14 @@ public class BoardController {
 	
 //	@Auth(role=Role.USER )
 	@RequestMapping(value = "/modify/{id:[\\d]+}", method = RequestMethod.GET)
-	public String modifyView(@PathVariable Long id,Model model, @AuthUser UserVo authUser) {
+	public String modifyView(@PathVariable Long id,Model model, @AuthUser SecurityUser securityUser) {
 		
 
 		BoardVo vo = boardService.getWriting(id);
-		if(authUser == null || 
+		if(securityUser == null || 
 				vo==null ||
 				vo.getStatus()==StatusType.DELETED ||
-				authUser.getNo() != vo.getUserNo()) {
+						securityUser.getNo() != vo.getUserNo()) {
 			return "redirect:/board";
 		}
 		model.addAttribute("vo", vo);
@@ -124,14 +123,14 @@ public class BoardController {
 //	@Auth(role = Role.USER)
 	@RequestMapping(value = "/delete/{id:[\\d]+}", method = RequestMethod.GET)
 	public String delete(@PathVariable Long id,
-			Model model, @AuthUser UserVo authUser) {
+			Model model, @AuthUser SecurityUser securityUser) {
 
 		BoardVo vo = boardService.getWriting(id);
 
-		if(authUser == null || 
+		if(securityUser == null || 
 				vo==null ||
 				vo.getStatus()==StatusType.DELETED ||
-				authUser.getNo() != vo.getUserNo()) {
+						securityUser.getNo() != vo.getUserNo()) {
 			return "redirect:/board";
 		}
 

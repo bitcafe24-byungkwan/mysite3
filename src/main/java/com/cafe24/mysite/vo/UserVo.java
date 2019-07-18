@@ -25,7 +25,7 @@ public class UserVo {
 	@NotEmpty
 	private String email;
 	
-	@Pattern(regexp="[0-9]{5}")
+	@Pattern(regexp="[0-9]{4}")
 	private String password;
 	
 	@ValidGender

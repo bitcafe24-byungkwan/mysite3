@@ -49,15 +49,7 @@ public class UserDao {
 		return 1 == count;
 	}
 	public UserVo get(String username) {
-
-	
-			UserVo vo = new UserVo();
-			vo.setNo(2L);
-			vo.setName("둘리");
-			vo.setEmail("dooly@gmail.com");
-			vo.setPassword("1234");
-			//return sqlSession.selectOne("user.getByEmail", email);
-			return vo;
+		return sqlSession.selectOne("user.getByEmail", username);	
 		
 	}
 	

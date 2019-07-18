@@ -13,11 +13,12 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
+
+import com.cafe24.mysite.security.AuthUser;
+import com.cafe24.mysite.security.SecurityUser;
 import com.cafe24.mysite.service.UserService;
 import com.cafe24.mysite.vo.UserVo;
-import com.cafe24.security.AuthUser;
 
 
 @Controller
@@ -96,17 +97,9 @@ public class UserController {
 //	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.GET )
-	public String updateForm(@AuthUser UserVo authUser, HttpSession session, Model model) {
-		if(session == null) {			
-			return "redirect:/";
-		}
-		
-		//UserVo authUser = (UserVo)session.getAttribute("authUser");		
-		if(authUser == null) {
-			return "redirect:/";
-		}
-		
-		Long userNo = authUser.getNo();
+	public String updateForm(@AuthUser SecurityUser securityUser, Model model) {
+	
+		Long userNo = securityUser.getNo();
 		UserVo userVo = userService.getUser(userNo);
 		model.addAttribute("userVo", userVo);
 

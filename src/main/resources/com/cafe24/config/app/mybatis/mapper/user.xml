@@ -16,14 +16,14 @@
 	
 	<select id="getByEmailAndPassword" resultType="uservo" parameterType='map'>
 	<![CDATA[
-	select no, name, role from user
+	select no, name,password, role from user
 		where email=#{email } and password like #{password }					
 	]]>
 	</select>
 	
 	<select id="getByNo" resultType="uservo" parameterType='long'>
 	<![CDATA[
-	select no,name,email,gender 
+	select no,name,password,email,gender 
 		from user  
 		where no= #{value }				
 	]]>
