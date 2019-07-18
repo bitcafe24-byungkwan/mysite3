@@ -100,6 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//
 		http.formLogin().loginPage("/user/login").loginProcessingUrl("/user/auth").failureUrl("/user/login?result=fail")
 		//.defaultSuccessUrl("/", true)
+		
 		.successHandler(authenticationSuccessHandler())
 		.usernameParameter("email").passwordParameter("password");
 
@@ -148,9 +149,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	// AuthenticationSuccessHandler 등록
-		@Bean
-		public AuthenticationSuccessHandler authenticationSuccessHandler() {
-			return new CustomUrlAuthenticationSuccessHandler();
-		}
+	@Bean
+	public AuthenticationSuccessHandler authenticationSuccessHandler() {
+		return new CustomUrlAuthenticationSuccessHandler();
+	}
 
 }

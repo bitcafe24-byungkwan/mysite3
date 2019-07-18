@@ -55,7 +55,7 @@ $(function(){
 					<label class="block-label" for="email">이메일</label>
 					<input id="email" name="email" type="text" value="">
 					<label class="block-label" >패스워드</label>
-					<input name="password" type="password" value="">
+					<input id="password" name="password" type="password" value="">
 					<label class="block-label" >자동로그인</label>
 					<input name="remember-me" type="checkbox">
 					<c:if test='${requestScope.result == "fail" }'>

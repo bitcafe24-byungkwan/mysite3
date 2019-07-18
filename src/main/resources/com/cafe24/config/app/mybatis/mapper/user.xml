@@ -14,6 +14,11 @@
 	</selectKey>								
 	</insert>
 	
+	<select id="getByEmail" parameterType="string" resultType="uservo">
+		select no, name, password, role from user
+		where email=#{value }
+	</select>
+	
 	<select id="getByEmailAndPassword" resultType="uservo" parameterType='map'>
 	<![CDATA[
 	select no, name,password, role from user
